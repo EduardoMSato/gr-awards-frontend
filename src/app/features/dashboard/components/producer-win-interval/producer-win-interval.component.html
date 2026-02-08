@@ -1,0 +1,51 @@
+<p-card header="Producers with longest and shortest interval between wins">
+  <h3 class="text-base font-semibold mb-2">Maximum</h3>
+  <p-table [value]="maxIntervals" [tableStyle]="{ 'min-width': '100%' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Producer</th>
+        <th>Interval</th>
+        <th>Previous Year</th>
+        <th>Following Year</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>{{ item.producer }}</td>
+        <td>{{ item.interval }}</td>
+        <td>{{ item.previousWin }}</td>
+        <td>{{ item.followingWin }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4">No data available</td>
+      </tr>
+    </ng-template>
+  </p-table>
+
+  <h3 class="text-base font-semibold mb-2 mt-4">Minimum</h3>
+  <p-table [value]="minIntervals" [tableStyle]="{ 'min-width': '100%' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Producer</th>
+        <th>Interval</th>
+        <th>Previous Year</th>
+        <th>Following Year</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-item>
+      <tr>
+        <td>{{ item.producer }}</td>
+        <td>{{ item.interval }}</td>
+        <td>{{ item.previousWin }}</td>
+        <td>{{ item.followingWin }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="4">No data available</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>
