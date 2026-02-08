@@ -166,4 +166,50 @@ describe('MovieListComponent', () => {
 
     expect(movieServiceSpy.getMovies).toHaveBeenCalledWith(1, 15, undefined, undefined);
   });
+
+  it('should set loading to false after data loads', () => {
+    expect(component.loading).toBeFalse();
+  });
+
+  it('should set totalRecords from API response', () => {
+    expect(component.totalRecords).toBe(200);
+  });
+
+  it('should reset to first page when filters are applied', () => {
+    movieServiceSpy.getMovies.calls.reset();
+    component.filterYear = 1990;
+    component.applyFilters();
+
+    expect(movieServiceSpy.getMovies).toHaveBeenCalledWith(0, 15, undefined, 1990);
+  });
+
+  it('should handle page 3 pagination correctly', () => {
+    movieServiceSpy.getMovies.calls.reset();
+    component.loadMovies({ first: 30, rows: 15 });
+
+    expect(movieServiceSpy.getMovies).toHaveBeenCalledWith(2, 15, undefined, undefined);
+  });
+
+  it('should display multiple studios joined by comma', () => {
+    movieServiceSpy.getMovies.and.returnValue(
+      of({
+        ...mockResponse,
+        content: [
+          {
+            id: 3,
+            year: 2000,
+            title: 'Multi Studio',
+            studios: ['Studio X', 'Studio Y'],
+            producers: ['Prod'],
+            winner: true,
+          },
+        ],
+      })
+    );
+    component.applyFilters();
+    fixture.detectChanges();
+
+    const cells = fixture.nativeElement.querySelectorAll('tbody tr:first-child td');
+    expect(cells[3].textContent.trim()).toBe('Studio X, Studio Y');
+  });
 });

@@ -43,4 +43,22 @@ describe('ApiInterceptor', () => {
     expect(req.request.url).toBe(environment.apiBaseUrl);
     req.flush({});
   });
+
+  it('should preserve query params when prepending base URL', () => {
+    httpClient.get('', { params: { page: '0', size: '15' } }).subscribe();
+
+    const req = httpMock.expectOne(
+      (r) => r.url === environment.apiBaseUrl && r.params.get('page') === '0'
+    );
+    expect(req.request.params.get('size')).toBe('15');
+    req.flush({});
+  });
+
+  it('should preserve request method', () => {
+    httpClient.get('/studiosWithWinCount').subscribe();
+
+    const req = httpMock.expectOne(`${environment.apiBaseUrl}/studiosWithWinCount`);
+    expect(req.request.method).toBe('GET');
+    req.flush({});
+  });
 });
