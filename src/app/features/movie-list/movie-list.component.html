@@ -1,0 +1,59 @@
+<div class="mb-4 flex flex-wrap gap-4 items-end">
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Year</label>
+    <input
+      type="number"
+      pInputText
+      [(ngModel)]="filterYear"
+      placeholder="Filter by year"
+      (keydown.enter)="applyFilters()"
+    />
+  </div>
+  <div>
+    <label class="block text-sm font-medium text-gray-700 mb-1">Winner?</label>
+    <p-dropdown
+      [options]="winnerOptions"
+      [(ngModel)]="filterWinner"
+      optionLabel="label"
+      optionValue="value"
+      (onChange)="applyFilters()"
+    ></p-dropdown>
+  </div>
+</div>
+
+<p-table
+  [value]="movies"
+  [lazy]="true"
+  [paginator]="true"
+  [rows]="rows"
+  [totalRecords]="totalRecords"
+  [loading]="loading"
+  (onLazyLoad)="loadMovies($event)"
+  [tableStyle]="{ 'min-width': '100%' }"
+>
+  <ng-template pTemplate="header">
+    <tr>
+      <th>Id</th>
+      <th>Year</th>
+      <th>Title</th>
+      <th>Studios</th>
+      <th>Producers</th>
+      <th>Winner</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-movie>
+    <tr>
+      <td>{{ movie.id }}</td>
+      <td>{{ movie.year }}</td>
+      <td>{{ movie.title }}</td>
+      <td>{{ movie.studios?.join(', ') }}</td>
+      <td>{{ movie.producers?.join(', ') }}</td>
+      <td>{{ movie.winner ? 'Yes' : 'No' }}</td>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="emptymessage">
+    <tr>
+      <td colspan="6">No movies found</td>
+    </tr>
+  </ng-template>
+</p-table>
