@@ -1,0 +1,40 @@
+<p-card header="List movie winners by year">
+  <div class="flex gap-2 mb-4">
+    <input
+      type="number"
+      pInputText
+      [(ngModel)]="searchYear"
+      placeholder="Search by year"
+      class="w-full"
+    />
+    <button
+      pButton
+      type="button"
+      label="Search"
+      (click)="searchWinners()"
+      [disabled]="!searchYear"
+    ></button>
+  </div>
+
+  <p-table [value]="winners" [tableStyle]="{ 'min-width': '100%' }">
+    <ng-template pTemplate="header">
+      <tr>
+        <th>Id</th>
+        <th>Year</th>
+        <th>Title</th>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-movie>
+      <tr>
+        <td>{{ movie.id }}</td>
+        <td>{{ movie.year }}</td>
+        <td>{{ movie.title }}</td>
+      </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage">
+      <tr>
+        <td colspan="3">No winners found</td>
+      </tr>
+    </ng-template>
+  </p-table>
+</p-card>

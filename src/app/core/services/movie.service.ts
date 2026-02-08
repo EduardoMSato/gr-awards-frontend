@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import {
-  Movie,
   MoviePage,
   YearsWithMultipleWinnersResponse,
   StudiosWithWinCountResponse,
@@ -41,8 +40,12 @@ export class MovieService {
     return this.http.get<MaxMinWinIntervalResponse>('/maxMinWinIntervalForProducers');
   }
 
-  getWinnersByYear(year: number): Observable<Movie[]> {
-    const params = new HttpParams().set('winner', true).set('year', year);
-    return this.http.get<Movie[]>('', { params });
+  getWinnersByYear(year: number): Observable<MoviePage> {
+    const params = new HttpParams()
+      .set('winner', true)
+      .set('year', year)
+      .set('page', 0)
+      .set('size', 99);
+    return this.http.get<MoviePage>('', { params });
   }
 }

@@ -6,7 +6,6 @@ import {
   YearsWithMultipleWinnersResponse,
   StudiosWithWinCountResponse,
   MaxMinWinIntervalResponse,
-  Movie,
 } from '../models/movie.model';
 
 describe('MovieService', () => {
@@ -135,25 +134,31 @@ describe('MovieService', () => {
   });
 
   describe('getWinnersByYear', () => {
-    it('should fetch winners for a specific year', () => {
-      const mockResponse: Movie[] = [
-        {
-          id: 1,
-          year: 2018,
-          title: 'Winner Movie',
-          studios: ['Studio'],
-          producers: ['Producer'],
-          winner: true,
-        },
-      ];
+    it('should fetch winners for a specific year with page and size', () => {
+      const mockResponse = {
+        content: [
+          {
+            id: 1,
+            year: 2018,
+            title: 'Winner Movie',
+            studios: ['Studio'],
+            producers: ['Producer'],
+            winner: true,
+          },
+        ],
+      };
 
       service.getWinnersByYear(2018).subscribe((result) => {
-        expect(result.length).toBe(1);
-        expect(result[0].winner).toBeTrue();
+        expect(result.content.length).toBe(1);
+        expect(result.content[0].winner).toBeTrue();
       });
 
       const req = httpMock.expectOne(
-        (r) => r.params.get('year') === '2018' && r.params.get('winner') === 'true'
+        (r) =>
+          r.params.get('year') === '2018' &&
+          r.params.get('winner') === 'true' &&
+          r.params.get('page') === '0' &&
+          r.params.get('size') === '99'
       );
       expect(req.request.method).toBe('GET');
       req.flush(mockResponse);

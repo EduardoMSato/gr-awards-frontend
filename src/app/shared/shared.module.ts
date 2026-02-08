@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { DropdownModule } from 'primeng/dropdown';
@@ -17,7 +18,7 @@ const PRIMENG_MODULES = [
 ];
 
 @NgModule({
-  imports: [CommonModule, ...PRIMENG_MODULES],
-  exports: [CommonModule, ...PRIMENG_MODULES],
+  imports: [CommonModule, FormsModule, ...PRIMENG_MODULES],
+  exports: [CommonModule, FormsModule, ...PRIMENG_MODULES],
 })
 export class SharedModule {}
