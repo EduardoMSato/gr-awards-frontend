@@ -1,5 +1,15 @@
 <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-  <p-card *ngFor="let title of panelTitles; trackBy: trackByIndex" [header]="title">
+  <app-years-multiple-winners [years]="yearsWithMultipleWinners"></app-years-multiple-winners>
+
+  <p-card header="Top 3 studios with winners">
+    <p class="text-gray-500 text-sm">Loading...</p>
+  </p-card>
+
+  <p-card header="Producers with longest and shortest interval between wins">
+    <p class="text-gray-500 text-sm">Loading...</p>
+  </p-card>
+
+  <p-card header="List movie winners by year">
     <p class="text-gray-500 text-sm">Loading...</p>
   </p-card>
 </div>

@@ -1,18 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { MovieService } from '../../core/services/movie.service';
+import { YearWithMultipleWinners } from '../../core/models/movie.model';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent {
-  readonly panelTitles = [
-    'List years with multiple winners',
-    'Top 3 studios with winners',
-    'Producers with longest and shortest interval between wins',
-    'List movie winners by year',
-  ];
+export class DashboardComponent implements OnInit {
+  yearsWithMultipleWinners: YearWithMultipleWinners[] = [];
 
-  trackByIndex(index: number): number {
-    return index;
+  constructor(private readonly movieService: MovieService) {}
+
+  ngOnInit(): void {
+    this.movieService.getYearsWithMultipleWinners().subscribe((response) => {
+      this.yearsWithMultipleWinners = response.years;
+    });
   }
 }
