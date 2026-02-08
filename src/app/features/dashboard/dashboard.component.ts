@@ -2,6 +2,17 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'app-dashboard',
-  template: '<p>Dashboard works!</p>',
+  templateUrl: './dashboard.component.html',
 })
-export class DashboardComponent {}
+export class DashboardComponent {
+  readonly panelTitles = [
+    'List years with multiple winners',
+    'Top 3 studios with winners',
+    'Producers with longest and shortest interval between wins',
+    'List movie winners by year',
+  ];
+
+  trackByIndex(index: number): number {
+    return index;
+  }
+}
