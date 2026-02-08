@@ -1,27 +1,90 @@
-# GrAwardsFrontend
+# Golden Raspberry Awards Frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 15.2.11.
+Aplicacao Angular para consulta de dados do Golden Raspberry Awards, incluindo filmes vencedores, ranking de studios e intervalos de premiacoes de produtores.
 
-## Development server
+## Pre-requisitos
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+- Node.js 16.x ou 18.x
 
-## Code scaffolding
+## Instalacao
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+```bash
+npm install
+```
+
+## Executando a Aplicacao
+
+```bash
+npm run start
+```
+
+Acesse `http://localhost:4200/`. A aplicacao redireciona para o Dashboard por padrao.
+
+## Testes
+
+```bash
+# Interativo (watch mode, abre o Chrome)
+npm test
+
+# Headless (execucao unica, ideal para CI)
+npm run test:headless
+
+# Com coverage report
+npm run test:coverage
+```
+
+O coverage report e gerado em `coverage/gr-awards-frontend/index.html`.
+
+## Lint e Formatacao
+
+```bash
+npm run lint
+npm run format
+npm run format:check
+```
 
 ## Build
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+```bash
+npm run build
+```
 
-## Running unit tests
+Os artefatos de build sao armazenados no diretorio `dist/`.
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Estrutura do Projeto
 
-## Running end-to-end tests
+```
+src/app/
+├── core/                          # Services singleton, models, interceptors
+│   ├── models/movie.model.ts      # Interfaces TypeScript para respostas da API
+│   ├── services/movie.service.ts  # Todas as chamadas da API (5 metodos)
+│   └── interceptors/              # HTTP interceptor (injecao da base URL)
+├── shared/                        # SharedModule (exports PrimeNG + FormsModule)
+├── layout/                        # App shell (HeaderComponent com navegacao)
+├── features/
+│   ├── dashboard/                 # Lazy-loaded — dashboard com 4 paineis
+│   │   └── components/
+│   │       ├── years-multiple-winners/
+│   │       ├── top-studios/
+│   │       ├── producer-win-interval/
+│   │       └── winners-by-year/
+│   └── movie-list/                # Lazy-loaded — tabela de filmes com paginacao e filtros
+├── app-routing.module.ts          # Lazy routes: /dashboard, /movies
+├── app.module.ts
+└── app.component.ts
+```
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+## Tech Stack
 
-## Further help
+| Camada | Tecnologia |
+|---|---|
+| Framework | Angular 15 |
+| Componentes | PrimeNG 15 (Lara Light Indigo theme) |
+| Layout | Tailwind CSS 3 |
+| Testes | Jasmine + Karma |
+| Qualidade de Codigo | ESLint + Prettier |
+| Git Hooks | Husky + lint-staged |
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+## API
+
+Consome a API REST do Golden Raspberry Awards em `https://challenge.outsera.tech/api/movies`.
