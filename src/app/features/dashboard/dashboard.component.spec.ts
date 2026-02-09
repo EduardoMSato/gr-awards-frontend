@@ -6,6 +6,7 @@ import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
 import { InputTextModule } from 'primeng/inputtext';
 import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 import { DashboardComponent } from './dashboard.component';
 import { YearsMultipleWinnersComponent } from './components/years-multiple-winners/years-multiple-winners.component';
 import { TopStudiosComponent } from './components/top-studios/top-studios.component';
@@ -49,10 +50,12 @@ describe('DashboardComponent', () => {
       'getYearsWithMultipleWinners',
       'getStudiosWithWinCount',
       'getMaxMinWinIntervalForProducers',
+      'getWinnerYears',
     ]);
     movieServiceSpy.getYearsWithMultipleWinners.and.returnValue(of(mockYears));
     movieServiceSpy.getStudiosWithWinCount.and.returnValue(of(mockStudios));
     movieServiceSpy.getMaxMinWinIntervalForProducers.and.returnValue(of(mockIntervals));
+    movieServiceSpy.getWinnerYears.and.returnValue(of([1986, 1990]));
 
     await TestBed.configureTestingModule({
       imports: [
@@ -62,6 +65,7 @@ describe('DashboardComponent', () => {
         TableModule,
         InputTextModule,
         ButtonModule,
+        DropdownModule,
       ],
       declarations: [
         DashboardComponent,

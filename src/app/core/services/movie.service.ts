@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import {
   MoviePage,
   YearsWithMultipleWinnersResponse,
@@ -47,5 +47,15 @@ export class MovieService {
       .set('page', 0)
       .set('size', 99);
     return this.http.get<MoviePage>('', { params });
+  }
+
+  getWinnerYears(): Observable<number[]> {
+    const params = new HttpParams().set('winner', true).set('page', 0).set('size', 99999);
+    return this.http.get<MoviePage>('', { params }).pipe(
+      map((response) => {
+        const years = response.content.map((movie) => movie.year);
+        return [...new Set(years)].sort((a, b) => a - b);
+      })
+    );
   }
 }

@@ -133,6 +133,32 @@ describe('MovieService', () => {
     });
   });
 
+  describe('getWinnerYears', () => {
+    it('should fetch all winners and return sorted unique years', () => {
+      const mockResponse = {
+        content: [
+          { id: 1, year: 2000, title: 'Movie A', studios: [], producers: [], winner: true },
+          { id: 2, year: 1990, title: 'Movie B', studios: [], producers: [], winner: true },
+          { id: 3, year: 2000, title: 'Movie C', studios: [], producers: [], winner: true },
+          { id: 4, year: 1980, title: 'Movie D', studios: [], producers: [], winner: true },
+        ],
+      };
+
+      service.getWinnerYears().subscribe((years) => {
+        expect(years).toEqual([1980, 1990, 2000]);
+      });
+
+      const req = httpMock.expectOne(
+        (r) =>
+          r.params.get('winner') === 'true' &&
+          r.params.get('page') === '0' &&
+          r.params.get('size') === '99999'
+      );
+      expect(req.request.method).toBe('GET');
+      req.flush(mockResponse);
+    });
+  });
+
   describe('getWinnersByYear', () => {
     it('should fetch winners for a specific year with page and size', () => {
       const mockResponse = {

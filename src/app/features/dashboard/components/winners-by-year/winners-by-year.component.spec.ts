@@ -4,8 +4,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { of } from 'rxjs';
 import { CardModule } from 'primeng/card';
 import { TableModule } from 'primeng/table';
-import { InputTextModule } from 'primeng/inputtext';
-import { ButtonModule } from 'primeng/button';
+import { DropdownModule } from 'primeng/dropdown';
 import { WinnersByYearComponent } from './winners-by-year.component';
 import { MovieService } from '../../../../core/services/movie.service';
 import { Movie, MoviePage } from '../../../../core/models/movie.model';
@@ -28,20 +27,15 @@ describe('WinnersByYearComponent', () => {
 
   const mockResponse = { content: mockMovies } as MoviePage;
   const emptyResponse = { content: [] } as unknown as MoviePage;
+  const mockYears = [1980, 1990, 2000, 2010];
 
   beforeEach(async () => {
-    movieServiceSpy = jasmine.createSpyObj('MovieService', ['getWinnersByYear']);
+    movieServiceSpy = jasmine.createSpyObj('MovieService', ['getWinnersByYear', 'getWinnerYears']);
     movieServiceSpy.getWinnersByYear.and.returnValue(of(mockResponse));
+    movieServiceSpy.getWinnerYears.and.returnValue(of(mockYears));
 
     await TestBed.configureTestingModule({
-      imports: [
-        NoopAnimationsModule,
-        FormsModule,
-        CardModule,
-        TableModule,
-        InputTextModule,
-        ButtonModule,
-      ],
+      imports: [NoopAnimationsModule, FormsModule, CardModule, TableModule, DropdownModule],
       declarations: [WinnersByYearComponent],
       providers: [{ provide: MovieService, useValue: movieServiceSpy }],
     }).compileComponents();
@@ -55,36 +49,36 @@ describe('WinnersByYearComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should have search button disabled when no year entered', () => {
-    const button = fixture.nativeElement.querySelector('button');
-    expect(button.disabled).toBeTrue();
+  it('should load winner years on init', () => {
+    expect(movieServiceSpy.getWinnerYears).toHaveBeenCalled();
+    expect(component.yearOptions.length).toBe(4);
+    expect(component.yearOptions[0]).toEqual({ label: '1980', value: 1980 });
+    expect(component.yearOptions[3]).toEqual({ label: '2010', value: 2010 });
   });
 
-  it('should enable search button when year is entered', () => {
-    component.searchYear = 1990;
-    fixture.detectChanges();
-
-    const button = fixture.nativeElement.querySelector('button');
-    expect(button.disabled).toBeFalse();
-  });
-
-  it('should call MovieService when search is triggered', () => {
-    component.searchYear = 1990;
-    component.searchWinners();
+  it('should fetch winners when a year is selected', () => {
+    component.selectedYear = 1990;
+    component.onYearChange();
 
     expect(movieServiceSpy.getWinnersByYear).toHaveBeenCalledWith(1990);
+    expect(component.winners.length).toBe(1);
+    expect(component.winners[0].title).toBe('Test Movie');
   });
 
-  it('should not call MovieService when year is null', () => {
-    component.searchYear = null;
-    component.searchWinners();
+  it('should clear winners when year is deselected', () => {
+    component.selectedYear = 1990;
+    component.onYearChange();
+    expect(component.winners.length).toBe(1);
 
-    expect(movieServiceSpy.getWinnersByYear).not.toHaveBeenCalled();
+    component.selectedYear = null;
+    component.onYearChange();
+    expect(component.winners.length).toBe(0);
+    expect(movieServiceSpy.getWinnersByYear).toHaveBeenCalledTimes(1);
   });
 
-  it('should display results after search', () => {
-    component.searchYear = 1990;
-    component.searchWinners();
+  it('should display results after selecting a year', () => {
+    component.selectedYear = 1990;
+    component.onYearChange();
     fixture.detectChanges();
 
     const rows = fixture.nativeElement.querySelectorAll('tbody tr');
@@ -98,8 +92,8 @@ describe('WinnersByYearComponent', () => {
 
   it('should show empty message when no winners found', () => {
     movieServiceSpy.getWinnersByYear.and.returnValue(of(emptyResponse));
-    component.searchYear = 2099;
-    component.searchWinners();
+    component.selectedYear = 2099;
+    component.onYearChange();
     fixture.detectChanges();
 
     const emptyRow = fixture.nativeElement.querySelector('tbody tr td');

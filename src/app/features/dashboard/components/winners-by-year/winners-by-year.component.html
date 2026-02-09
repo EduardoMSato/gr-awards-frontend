@@ -1,19 +1,13 @@
 <p-card header="List movie winners by year">
-  <div class="flex gap-2 mb-4">
-    <input
-      type="number"
-      pInputText
-      [(ngModel)]="searchYear"
-      placeholder="Search by year"
-      class="w-full"
-    />
-    <button
-      pButton
-      type="button"
-      label="Search"
-      (click)="searchWinners()"
-      [disabled]="!searchYear"
-    ></button>
+  <div class="mb-4">
+    <p-dropdown
+      [options]="yearOptions"
+      [(ngModel)]="selectedYear"
+      (ngModelChange)="onYearChange()"
+      placeholder="Select a year"
+      [showClear]="true"
+      [style]="{ width: '100%' }"
+    ></p-dropdown>
   </div>
 
   <p-table [value]="winners" [tableStyle]="{ 'min-width': '100%' }">
