@@ -2,6 +2,8 @@
 
 Aplicacao Angular para consulta de dados do Golden Raspberry Awards, incluindo filmes vencedores, ranking de studios e intervalos de premiacoes de produtores.
 
+**Live:** [https://eduardomsato.github.io/gr-awards-frontend/](https://eduardomsato.github.io/gr-awards-frontend/)
+
 ## Pre-requisitos
 
 - Node.js 16.x ou 18.x
@@ -84,6 +86,15 @@ src/app/
 | Testes | Jasmine + Karma |
 | Qualidade de Codigo | ESLint + Prettier |
 | Git Hooks | Husky + lint-staged |
+
+## Deploy (GitHub Pages)
+
+```bash
+npm run build:ghpages
+npx angular-cli-ghpages --dir=dist/gr-awards-frontend
+```
+
+O primeiro comando gera o build de producao com `--base-href` configurado e cria o `404.html` para suporte a SPA routing. O segundo publica o conteudo na branch `gh-pages`.
 
 ## API
 
